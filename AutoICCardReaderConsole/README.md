@@ -1,12 +1,12 @@
 # AutoICCardReaderConsole
 
-A .NET 10 console application that monitors a PC/SC smart-card reader. By default, it reads a card's ATR and prints it as hexadecimal to standard output. Pass `--apdu` to use the Taiwan NHI-specific APDU commands and print only the card's ID number. Timestamped diagnostics and elapsed timings are written to standard error. Card-read diagnostics also show elapsed time since the insertion event. Press `Ctrl+C` to exit.
+A .NET 10 console application that monitors a PC/SC smart-card reader. By default, it reads a card's ATR and prints it as hexadecimal to standard output. Pass `--apdu` to use the Taiwan NHI-specific APDU commands and print the readable NHI profile fields (card number, name, ID number, birthday, sex, and card issue date) plus the full profile response bytes in hexadecimal. Timestamped diagnostics and elapsed timings are written to standard error. Card-read diagnostics also show elapsed time since the insertion event. Press `Ctrl+C` to exit.
 
 ```sh
 # Generic smart-card mode: read the ATR
 ./AutoICCardReaderConsole
 
-# Taiwan NHI card mode: send NHI-specific APDUs and print the ID number
+# Taiwan NHI card mode: send NHI-specific APDUs and print the profile
 ./AutoICCardReaderConsole --apdu
 ```
 
@@ -34,4 +34,4 @@ chmod +x ./AutoICCardReaderConsole
 ./AutoICCardReaderConsole [--apdu]
 ```
 
-The default ATR mode does not read cardholder information. The `--apdu` mode outputs the card's ID number, which is sensitive personal information; protect console output and any redirection or logs.
+The default ATR mode does not read cardholder information. The `--apdu` mode outputs sensitive cardholder information and raw card profile data; protect console output and any redirection or logs.

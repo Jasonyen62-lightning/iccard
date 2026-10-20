@@ -1,6 +1,7 @@
 using PCSC;
 using PCSC.Monitoring;
 using System.Diagnostics;
+using System.Globalization;
 
 if (args.Length > 1 ||
     (args.Length == 1 && !string.Equals(args[0], "--apdu", StringComparison.OrdinalIgnoreCase)))
@@ -69,14 +70,13 @@ while (!shutdown.IsCancellationRequested)
             if (useNhiApdu)
             {
                 var profile = SmartCardReader.ReadNhiProfile(readerName, ReportCardStage);
-                ReportCardStage("NHI profile read complete; writing de-identified fields to stdout.");
-                Console.WriteLine($"卡號：[已遮蔽]");
-                Console.WriteLine($"姓名：[已遮蔽]");
-                Console.WriteLine($"身分證號：[已遮蔽]");
-                Console.WriteLine($"生日：[已遮蔽]");
-                Console.WriteLine($"性別：[已遮蔽]");
-                Console.WriteLine($"發卡日期：[已遮蔽]");
-                Console.WriteLine($"APDU 回傳原始資料（HEX）：[已遮蔽]");
+                ReportCardStage("NHI profile read complete; masking personal fields.");
+                Console.WriteLine($"卡號：{MaskMiddle(profile.CardNumber)}");
+                Console.WriteLine($"姓名：{MaskMiddle(profile.Name)}");
+                Console.WriteLine($"身分證號：{MaskMiddle(profile.IdNumber)}");
+                Console.WriteLine($"生日：{MaskMiddle(profile.Birthday)}");
+                Console.WriteLine($"性別：{profile.Sex}");
+                Console.WriteLine($"發卡日期：{profile.CardDate}");
                 ReportCardStage("De-identified NHI profile fields written to stdout.");
             }
             else
@@ -121,6 +121,19 @@ while (!shutdown.IsCancellationRequested)
 static void WriteDiagnostic(string message)
 {
     Console.Error.WriteLine($"{DateTimeOffset.Now:yyyy-MM-dd HH:mm:ss.fff zzz} {message}");
+}
+
+static string MaskMiddle(string value)
+{
+    var textElements = StringInfo.ParseCombiningCharacters(value);
+    if (textElements.Length <= 2)
+    {
+        return value;
+    }
+
+    var first = value[..textElements[1]];
+    var last = value[textElements[^1]..];
+    return $"{first}{new string('*', textElements.Length - 2)}{last}";
 }
 
 static async Task DelayBeforeRetry(CancellationToken cancellationToken)

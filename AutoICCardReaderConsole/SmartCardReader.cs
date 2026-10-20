@@ -132,8 +132,7 @@ internal static class SmartCardReader
             idNumber,
             birthday,
             sex,
-            cardDate,
-            Convert.ToHexString(data));
+            cardDate);
     }
 
     private static string DecodeField(byte[] data, int offset, int length, Encoding encoding) =>
@@ -154,6 +153,5 @@ internal static class SmartCardReader
         string IdNumber,
         string Birthday,
         string Sex,
-        string CardDate,
-        string RawDataHex);
+        string CardDate);
 }

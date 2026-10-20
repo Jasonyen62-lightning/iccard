@@ -69,15 +69,15 @@ while (!shutdown.IsCancellationRequested)
             if (useNhiApdu)
             {
                 var profile = SmartCardReader.ReadNhiProfile(readerName, ReportCardStage);
-                ReportCardStage("NHI profile read complete; writing all readable fields to stdout.");
-                Console.WriteLine($"卡號：{profile.CardNumber}");
-                Console.WriteLine($"姓名：{profile.Name}");
-                Console.WriteLine($"身分證號：{profile.IdNumber}");
-                Console.WriteLine($"生日：{profile.Birthday}");
-                Console.WriteLine($"性別：{profile.Sex}");
-                Console.WriteLine($"發卡日期：{profile.CardDate}");
-                Console.WriteLine($"APDU 回傳原始資料（HEX）：{profile.RawDataHex}");
-                ReportCardStage("NHI profile fields and raw data written to stdout.");
+                ReportCardStage("NHI profile read complete; writing de-identified fields to stdout.");
+                Console.WriteLine($"卡號：[已遮蔽]");
+                Console.WriteLine($"姓名：[已遮蔽]");
+                Console.WriteLine($"身分證號：[已遮蔽]");
+                Console.WriteLine($"生日：[已遮蔽]");
+                Console.WriteLine($"性別：[已遮蔽]");
+                Console.WriteLine($"發卡日期：[已遮蔽]");
+                Console.WriteLine($"APDU 回傳原始資料（HEX）：[已遮蔽]");
+                ReportCardStage("De-identified NHI profile fields written to stdout.");
             }
             else
             {
